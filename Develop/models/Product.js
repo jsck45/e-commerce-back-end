@@ -20,12 +20,12 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    tag_id: {
-      type: DataTypes.DECIMAL,
+    price: {
+      type: DataTypes.DECIMAL, // or DataTypes.FLOAT, depending on your needs
       allowNull: false,
       validate: {
-        isDecimal: true
-      }
+        isDecimal: true,
+      },
     },
     stock: {
       type: DataTypes.INTEGER,
