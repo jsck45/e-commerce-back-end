@@ -19,30 +19,26 @@ router.get('/', async (req, res) => {
 });
 
 // get one product
-router.get('/:id', (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
-  router.get('/:id', async (req, res) => {
-    try {
-      const product = await Product.findByPk(req.params.id, {
-        include: [
-          { model: Category },
-          { model: Tag, through: ProductTag, as: 'productTag' }
-        ]
-      });
-  
-      if (!product) {
-        res.status(404).json({ message: 'Product not found' });
-        return;
-      }
-  
-      res.status(200).json(product);
-    } catch (err) {
-      res.status(500).json(err);
+router.get('/:id', async (req, res) => {
+  try {
+    const product = await Product.findByPk(req.params.id, {
+      include: [
+        { model: Category },
+        { model: Tag, through: ProductTag, as: 'productTag' }
+      ]
+    });
+
+    if (!product) {
+      res.status(404).json({ message: 'Product not found' });
+      return;
     }
-  });
-  
+
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
+
 
 // create new product
 router.post('/', async (req, res) => {
@@ -55,7 +51,8 @@ router.post('/', async (req, res) => {
     }
   */
   try {
-    const newProduct = await Product.create (req.body);
+    const newProduct = await Product.create(req.body);
+    
     if (req.body.tagIds.length) {
       const productTagIdArr = req.body.tagIds.map((tag_id) => {
         return {
@@ -63,34 +60,15 @@ router.post('/', async (req, res) => {
           tag_id,
         };
       });
-      await productTag.bulkCreate(productTagIdArr);
+      await ProductTag.bulkCreate(productTagIdArr);
     }
+    
     res.status(200).json(newProduct);
   } catch (err) {
     console.error(err);
     res.status(400).json(err);
   }
-  });
-  Product.create(req.body)
-    .then((product) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
-      if (req.body.tagIds.length) {
-        const productTagIdArr = req.body.tagIds.map((tag_id) => {
-          return {
-            product_id: product.id,
-            tag_id,
-          };
-        });
-        return ProductTag.bulkCreate(productTagIdArr);
-      }
-      // if no product tags, just respond
-      res.status(200).json(product);
-    })
-    .then((productTagIds) => res.status(200).json(productTagIds))
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
-    });
+});
 
 // update product
 router.put('/:id', (req, res) => {
