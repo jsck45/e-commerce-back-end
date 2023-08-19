@@ -34,6 +34,6 @@ This application requires Node.js, MySQL2, Sequelize and dotenv.
 
 ## Walkthough Video
 
-[Click here to watch a walkthrough video.](https://drive.google.com/file/d/1RSxQGSBFmQDotHVzMkjW_T5QElvWF41b/view)
+[Click here to watch a walkthrough video.](https://drive.google.com/file/d/1Yf4-HoKoSq4gDevKjuOT1ATo1n5_gI-R/view)
 
 
